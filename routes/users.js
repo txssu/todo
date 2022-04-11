@@ -55,7 +55,7 @@ router.post('/', async function (req, res) {
   Get user by id
 */
 router.get('/:userId', async function (req, res) {
-  var { userId } = req.params
+  let { userId } = req.params
 
   if (userId === '0' && typeof req.user !== 'undefined') {
     userId = req.user.id
