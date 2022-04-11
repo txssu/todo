@@ -9,6 +9,7 @@
     "docker-postgres": "scripts/run_postgres.sh",
     "lint": "eslint '**/*.js' --ignore-pattern node_modules/ --fix"
   },
+  "license": "MIT",
   "dependencies": {
     "bcrypt": "^5.0.1",
     "config": "^3.3.7",
