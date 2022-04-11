@@ -20,6 +20,11 @@ module.exports = {
       return undefined
     }
   },
+  async getUserByToken (token) {
+    const tokenObj = await models.Token.findOne({ where: { token } })
+    if (tokenObj) return await tokenObj.getUser()
+    else return undefined
+  },
   createUser ({ username, password, email }) {
     return models.User.create({ username, password, email })
   },
