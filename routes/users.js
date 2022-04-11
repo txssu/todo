@@ -55,7 +55,11 @@ router.post('/', async function (req, res) {
   Get user by id
 */
 router.get('/:userId', async function (req, res) {
-  const { userId } = req.params
+  var { userId } = req.params
+
+  if (userId === '0' && typeof req.user !== 'undefined') {
+    userId = req.user.id
+  }
 
   try {
     const user = await appCrud.getUserByID(userId)
