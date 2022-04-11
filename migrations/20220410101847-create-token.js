@@ -18,6 +18,7 @@ module.exports = {
         }
       },
       token: {
+        unique: true,
         type: Sequelize.STRING
       },
       createdAt: {
