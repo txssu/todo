@@ -51,5 +51,10 @@ module.exports = {
       userId,
       token
     })
+  },
+  deleteToken (token) {
+    return models.Token.destroy({
+      where: { token }
+    })
   }
 }

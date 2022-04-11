@@ -22,4 +22,13 @@ router.post('/', async function (req, res) {
   }
 })
 
+/*
+  Delete token
+*/
+router.delete('/:token', async function (req, res) {
+  const { token } = req.params
+  appCrud.deleteToken(token)
+  helpers.sendOk(res, {})
+})
+
 module.exports = router
