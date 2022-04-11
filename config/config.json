@@ -1,0 +1,33 @@
+{
+  "dev": {
+    "saltRounds": 1,
+    "db": {
+      "username": "todo",
+      "password": "todo",
+      "database": "todo_dev",
+      "host": "localhost",
+      "dialect": "postgres"
+    }
+  },
+  "test": {
+    "saltRounds": 1,
+    "db": {
+      "username": "todo",
+      "password": "todo",
+      "database": "todo_test",
+      "host": "localhost",
+      "dialect": "postgres",
+      "logging": false
+    }
+  },
+  "prod": {
+    "saltRounds": 10,
+    "db": {
+      "username": "todo",
+      "password": null,
+      "database": "todo_prod",
+      "host": "localhost",
+      "dialect": "postgres"
+    }
+  }
+}
