@@ -78,9 +78,20 @@ router.get('/:userId', async function (req, res) {
   Update user's username and/or email
 */
 router.put('/:userId', async function (req, res) {
-  const { userId } = req.params
+  let { userId } = req.params
+
+  if (
+    typeof req.user === 'undefined' ||
+    (userId !== '0' && req.user.id.toString !== userId)
+  ) {
+    helpers.sendError(res, 403, { msg: 'You can only edit your profile' })
+    return
+  }
+
+  userId = req.user.id
+
   try {
-    await appCrud.updateUsernameAndEmail(userId, req.user?.body)
+    await appCrud.updateUsernameAndEmail(userId, req.body.user)
     helpers.sendOk(res, {})
   } catch (e) {
     if (e instanceof Sequelize.ValidationError) {
@@ -97,7 +108,17 @@ router.put('/:userId', async function (req, res) {
   Delete user
 */
 router.delete('/:userId', async function (req, res) {
-  const { userId } = req.params
+  let { userId } = req.params
+
+  if (
+    typeof req.user === 'undefined' ||
+    (userId !== '0' && req.user.id.toString !== userId)
+  ) {
+    helpers.sendError(res, 403, { msg: 'You can only edit your profile' })
+    return
+  }
+
+  userId = req.user.id
 
   appCrud.deleteUser(userId)
   helpers.sendOk(res, {})
