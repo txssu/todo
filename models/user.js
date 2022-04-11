@@ -38,7 +38,9 @@ module.exports = (sequelize, DataTypes) => {
       modelName: 'User',
       hooks: {
         afterValidate: async (user, options) => {
-          user.password = await passwords.hashPassword(user.password)
+          if (user.password) {
+            user.password = await passwords.hashPassword(user.password)
+          }
         }
       }
     }
