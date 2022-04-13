@@ -13,12 +13,18 @@ const helpers = require('./helpers')
 */
 router.post('/', async function (req, res) {
   const { username, password } = req.body.user
+
+  if (typeof password === 'undefined') {
+    helpers.sendError(res, 422, { msg: 'Password required' })
+    return
+  }
+
   const user = await appCrud.getUserByUsernameAndPassword(username, password)
   if (typeof user !== 'undefined') {
     const token = await appCrud.createNewToken(user.id)
     helpers.sendOk(res, renderToken(token))
   } else {
-    helpers.sendError(res, 403, 'Wrong username or password')
+    helpers.sendError(res, 403, { msg: 'Wrong username or password' })
   }
 })
 
