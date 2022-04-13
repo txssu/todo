@@ -35,9 +35,7 @@ router.use(function (req, res, next) {
   Get all tasks
 */
 router.get('/', async function (req, res) {
-  const user = req.user
-
-  const tasks = await user.getTasks()
+  const tasks = await appCrud.getUsersTasks(req.user.id)
 
   helpers.sendOk(res, tasks.map(renderTask))
 })

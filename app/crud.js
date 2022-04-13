@@ -60,6 +60,11 @@ module.exports = {
   async createTask ({ title, userId }) {
     return models.Task.create({ title, userId })
   },
+  async getUsersTasks (userId) {
+    return models.Task.findAll({
+      where: { userId }
+    })
+  },
   async getUsersTaskById (user, taskId) {
     return models.Task.findOne({
       where: {
