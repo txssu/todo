@@ -18,11 +18,11 @@ module.exports = (sequelize, DataTypes) => {
     {
       userId: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: false
       },
       title: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: false
       },
       isComplete: {
         type: DataTypes.BOOLEAN,

@@ -67,7 +67,7 @@ router.post('/', async function (req, res) {
   Get task by id
 */
 router.get('/:taskId', async function (req, res) {
-  let { taskId } = req.params
+  const { taskId } = req.params
 
   try {
     const task = await appCrud.getUsersTaskById(req.user, taskId)
@@ -87,10 +87,10 @@ router.get('/:taskId', async function (req, res) {
   Update task's data
 */
 router.put('/:taskId', async function (req, res) {
-  let { taskId } = req.params
+  const { taskId } = req.params
 
   try {
-    await appCrud.updateTaskData(req.user, taskId, req.body.task)
+    await appCrud.updateTaskData(req.user.id, taskId, req.body.task)
     helpers.sendOk(res, {})
   } catch (e) {
     if (e instanceof Sequelize.ValidationError) {
@@ -104,7 +104,7 @@ router.put('/:taskId', async function (req, res) {
 })
 
 router.delete('/:taskId', async function (req, res) {
-  let { taskId } = req.params
+  const { taskId } = req.params
 
   appCrud.deleteTask(taskId)
   helpers.sendOk(res, {})

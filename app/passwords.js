@@ -7,10 +7,10 @@ const crypto = require('crypto')
 const saltRounds = config.saltRounds
 
 module.exports = {
-  hashPassword (password) {
+  async hashPassword (password) {
     return bcrypt.hash(password, saltRounds)
   },
-  comparePasswords (password, hash) {
+  async comparePasswords (password, hash) {
     return bcrypt.compare(password, hash)
   },
   async createToken () {

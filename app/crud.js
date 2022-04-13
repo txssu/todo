@@ -2,10 +2,10 @@ const models = require('../models')
 const passwords = require('./passwords')
 
 module.exports = {
-  getAllUsers () {
+  async getAllUsers () {
     return models.User.findAll()
   },
-  getUserByID (userId) {
+  async getUserByID (userId) {
     return models.User.findByPk(userId)
   },
   async getUserByUsernameAndPassword (username, password) {
@@ -22,13 +22,13 @@ module.exports = {
   },
   async getUserByToken (token) {
     const tokenObj = await models.Token.findOne({ where: { token } })
-    if (tokenObj) return await tokenObj.getUser()
+    if (tokenObj) return tokenObj.getUser()
     else return undefined
   },
-  createUser ({ username, password, email }) {
+  async createUser ({ username, password, email }) {
     return models.User.create({ username, password, email })
   },
-  updateUsernameAndEmail (userId, { username, email }) {
+  async updateUsernameAndEmail (userId, { username, email }) {
     return models.User.update(
       { username, email },
       {
@@ -38,7 +38,7 @@ module.exports = {
       }
     )
   },
-  deleteUser (userId) {
+  async deleteUser (userId) {
     return models.User.destroy({
       where: {
         id: userId
@@ -52,12 +52,12 @@ module.exports = {
       token
     })
   },
-  deleteToken (token) {
+  async deleteToken (token) {
     return models.Token.destroy({
       where: { token }
     })
   },
-  createTask ({ title, userId }) {
+  async createTask ({ title, userId }) {
     return models.Task.create({ title, userId })
   },
   async getUsersTaskById (user, taskId) {
@@ -68,22 +68,22 @@ module.exports = {
       }
     })
   },
-  updateTaskData (user, taskId, { title, isComplete }) {
+  async updateTaskData (userId, taskId, { title, isComplete }) {
     return models.Task.update(
       { title, isComplete },
       {
         where: {
-          userId: user.id,
+          userId: userId,
           id: taskId
         }
       }
     )
   },
-  deleteTask (taskId) {
+  async deleteTask (taskId) {
     return models.Task.destroy({
       where: {
         id: taskId
       }
     })
-  },
+  }
 }
