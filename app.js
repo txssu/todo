@@ -11,6 +11,7 @@ const auth = require('./middlewares/auth')
 const indexRouter = require('./routes/index')
 const usersRouter = require('./routes/users')
 const sessionRouter = require('./routes/session')
+const tasksRouter = require('./routes/tasks')
 
 const app = express()
 
@@ -26,5 +27,6 @@ app.use(auth)
 app.use('/', indexRouter)
 app.use('/users', usersRouter)
 app.use('/session', sessionRouter)
+app.use('/tasks', tasksRouter)
 
 module.exports = app

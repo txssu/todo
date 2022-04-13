@@ -56,5 +56,34 @@ module.exports = {
     return models.Token.destroy({
       where: { token }
     })
-  }
+  },
+  createTask ({ title, userId }) {
+    return models.Task.create({ title, userId })
+  },
+  async getUsersTaskById (user, taskId) {
+    return models.Task.findOne({
+      where: {
+        userId: user.id,
+        id: taskId
+      }
+    })
+  },
+  updateTaskData (user, taskId, { title, isComplete }) {
+    return models.Task.update(
+      { title, isComplete },
+      {
+        where: {
+          userId: user.id,
+          id: taskId
+        }
+      }
+    )
+  },
+  deleteTask (taskId) {
+    return models.Task.destroy({
+      where: {
+        id: taskId
+      }
+    })
+  },
 }

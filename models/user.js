@@ -14,6 +14,9 @@ module.exports = (sequelize, DataTypes) => {
       User.hasMany(models.Token, {
         foreignKey: 'userId'
       })
+      User.hasMany(models.Task, {
+        foreignKey: 'userId'
+      })
     }
   }
   User.init(
