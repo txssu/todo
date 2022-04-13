@@ -3,7 +3,7 @@ const express = require('express')
 const router = express.Router()
 const Sequelize = require('sequelize')
 
-const { renderTask } = require('./renders/task')
+const { renderTask } = require('../models/renders/task')
 
 const appCrud = require('../app/crud')
 

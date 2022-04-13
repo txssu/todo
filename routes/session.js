@@ -4,7 +4,7 @@ const router = express.Router()
 
 const appCrud = require('../app/crud')
 
-const { renderToken } = require('./renders/token')
+const { renderToken } = require('../models/renders/token')
 
 const helpers = require('./helpers')
 

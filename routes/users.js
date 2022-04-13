@@ -7,7 +7,7 @@ const appCrud = require('../app/crud')
 const router = express.Router()
 const helpers = require('./helpers')
 
-const { renderUser } = require('./renders/user')
+const { renderUser } = require('../models/renders/user')
 
 /*
   GET / - get all users
