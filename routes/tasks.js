@@ -46,7 +46,7 @@ router.get('/', async function (req, res) {
 */
 router.post('/', async function (req, res) {
   try {
-    const taskData = req.body.task
+    const taskData = req.body
     taskData.userId = req.user.id
     const task = await appCrud.createTask(taskData)
     res.send(renderTask(task))
@@ -88,7 +88,7 @@ router.put('/:taskId', async function (req, res) {
   const { taskId } = req.params
 
   try {
-    await appCrud.updateTaskData(req.user.id, taskId, req.body.task)
+    await appCrud.updateTaskData(req.user.id, taskId, req.body)
     res.send({})
   } catch (e) {
     if (e instanceof Sequelize.ValidationError) {
