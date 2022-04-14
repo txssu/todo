@@ -1,0 +1,27 @@
+version: '3.7'
+
+services:
+  database:
+    image: postgres:bullseye
+    container_name: todo_postgres
+    environment:
+      POSTGRES_USER: todo
+      POSTGRES_PASSWORD: todo
+      POSTGRES_DB: tododb
+    restart: always
+    ports:
+      - 15432:5432
+    volumes:
+      - ./docker/data/postgres:/var/lib/postgres/data
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: todo_app
+    environment:
+      DATABASE_URI: "postgres://todo:todo@database/todo_prod"
+    ports:
+      - 8080:8080
+    depends_on:
+      - postgres
+    command: ["npm", "run", "pm2"]

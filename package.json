@@ -5,8 +5,9 @@
   "scripts": {
     "pm2": "pm2 start processes.json --no-daemon",
     "dev": "DEBUG=todo:* NODE_ENV=dev node ./bin/www",
-    "migrate": "node ./bin/migrate.js",
-    "docker-postgres": "scripts/run_postgres.sh",
+    "db:create": "sequelize-cli db:create",
+    "db:migrate": "sequelize-cli db:migrate",
+    "docker-postgres": "scripts/docker_run_postgres.sh",
     "lint": "eslint '**/*.js' --ignore-pattern node_modules/ --fix"
   },
   "license": "MIT",
@@ -21,6 +22,7 @@
     "pg-hstore": "^2.3.4",
     "pm2": "^5.2.0",
     "sequelize": "^6.18.0",
+    "sequelize-cli": "^6.4.1",
     "swagger-jsdoc": "^6.2.0",
     "swagger-ui-express": "^4.3.0"
   },
@@ -29,7 +31,6 @@
     "eslint-config-standard": "^16.0.3",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^6.0.0",
-    "sequelize-cli": "^6.4.1"
+    "eslint-plugin-promise": "^6.0.0"
   }
 }
