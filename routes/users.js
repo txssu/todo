@@ -64,7 +64,7 @@ router.get('/:userId', async function (req, res) {
   try {
     const user = await appCrud.getUserByID(userId)
     if (user === null) {
-      res.status(422).send({ msg: 'User not found' })
+      res.status(404).send({ msg: 'User not found' })
     } else {
       res.send(renderUser(user))
     }
