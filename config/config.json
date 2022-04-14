@@ -21,10 +21,6 @@
   "prod": {
     "saltRounds": 10,
 
-    "username": "todo",
-    "password": null,
-    "database": "todo_prod",
-    "host": "localhost",
-    "dialect": "postgres"
+    "use_env_variable": "DATABASE_URI"
   }
 }
