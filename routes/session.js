@@ -15,7 +15,7 @@ router.post('/', async function (req, res) {
   const { username, password } = req.body
 
   if (typeof password === 'undefined') {
-    helpers.sendError(res, 422, { msg: 'Password required' })
+    res.status(422).send({ msg: 'Password required' })
     return
   }
 
@@ -24,7 +24,7 @@ router.post('/', async function (req, res) {
     const token = await appCrud.createNewToken(user.id)
     res.send(renderToken(token))
   } else {
-    helpers.sendError(res, 403, { msg: 'Wrong username or password' })
+    res.status(403).send({ msg: 'Wrong username or password' })
   }
 })
 

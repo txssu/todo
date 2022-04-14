@@ -43,7 +43,7 @@ router.post('/', async function (req, res) {
   } catch (e) {
     if (e instanceof Sequelize.ValidationError) {
       const msg = e.errors.map(x => x.message).join('\n')
-      helpers.sendError(res, 422, { msg })
+      res.status(422).send({ msg })
     } else {
       console.log(e)
       helpers.sendServerError(res)
@@ -64,7 +64,7 @@ router.get('/:userId', async function (req, res) {
   try {
     const user = await appCrud.getUserByID(userId)
     if (user === null) {
-      helpers.sendError(res, 422, { msg: 'User not found' })
+      res.status(422).send({ msg: 'User not found' })
     } else {
       res.send(renderUser(user))
     }
@@ -84,7 +84,7 @@ router.put('/:userId', async function (req, res) {
     typeof req.user === 'undefined' ||
     (userId !== '0' && req.user.id.toString !== userId)
   ) {
-    helpers.sendError(res, 403, { msg: 'You can only edit your profile' })
+    res.status(403).send({ msg: 'You can only edit your profile' })
     return
   }
 
@@ -96,7 +96,7 @@ router.put('/:userId', async function (req, res) {
   } catch (e) {
     if (e instanceof Sequelize.ValidationError) {
       const msg = e.errors.map(x => x.message).join('\n')
-      helpers.sendError(res, 422, { msg })
+      res.status(422).send({ msg })
     } else {
       console.log(e)
       helpers.sendServerError(res)
@@ -114,7 +114,7 @@ router.delete('/:userId', async function (req, res) {
     typeof req.user === 'undefined' ||
     (userId !== '0' && req.user.id.toString !== userId)
   ) {
-    helpers.sendError(res, 403, { msg: 'You can only edit your profile' })
+    res.status(403).send({ msg: 'You can only edit your profile' })
     return
   }
 

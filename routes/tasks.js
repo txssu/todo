@@ -11,7 +11,7 @@ const helpers = require('./helpers')
 
 router.use(function (req, res, next) {
   if (typeof req.user === 'undefined') {
-    helpers.sendError(res, 422, { msg: 'Authorization required' })
+    res.status(422).send({ msg: 'Authorization required' })
     return
   }
   next()
@@ -53,7 +53,7 @@ router.post('/', async function (req, res) {
   } catch (e) {
     if (e instanceof Sequelize.ValidationError) {
       const msg = e.errors.map(x => x.message).join('\n')
-      helpers.sendError(res, 422, { msg })
+      res.status(400).send({ msg })
     } else {
       console.log(e)
       helpers.sendServerError(res)
@@ -70,7 +70,7 @@ router.get('/:taskId', async function (req, res) {
   try {
     const task = await appCrud.getUsersTaskById(req.user, taskId)
     if (task === null) {
-      helpers.sendError(res, 422, { msg: 'Task not found' })
+      res.status(422).send({ msg: 'Task not found' })
     } else {
       console.log(task)
       res.send(renderTask(task))
@@ -93,7 +93,7 @@ router.put('/:taskId', async function (req, res) {
   } catch (e) {
     if (e instanceof Sequelize.ValidationError) {
       const msg = e.errors.map(x => x.message).join('\n')
-      helpers.sendError(res, 422, { msg })
+      res.status(400).send({ msg })
     } else {
       console.log(e)
       helpers.sendServerError(res)
