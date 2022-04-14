@@ -37,7 +37,7 @@ router.use(function (req, res, next) {
 router.get('/', async function (req, res) {
   const tasks = await appCrud.getUsersTasks(req.user.id)
 
-  helpers.sendOk(res, tasks.map(renderTask))
+  res.send(tasks.map(renderTask))
 })
 
 /*
@@ -49,7 +49,7 @@ router.post('/', async function (req, res) {
     const taskData = req.body.task
     taskData.userId = req.user.id
     const task = await appCrud.createTask(taskData)
-    helpers.sendOk(res, renderTask(task))
+    res.send(renderTask(task))
   } catch (e) {
     if (e instanceof Sequelize.ValidationError) {
       const msg = e.errors.map(x => x.message).join('\n')
@@ -73,7 +73,7 @@ router.get('/:taskId', async function (req, res) {
       helpers.sendError(res, 422, { msg: 'Task not found' })
     } else {
       console.log(task)
-      helpers.sendOk(res, renderTask(task))
+      res.send(renderTask(task))
     }
   } catch (e) {
     console.log(e)
@@ -89,7 +89,7 @@ router.put('/:taskId', async function (req, res) {
 
   try {
     await appCrud.updateTaskData(req.user.id, taskId, req.body.task)
-    helpers.sendOk(res, {})
+    res.send({})
   } catch (e) {
     if (e instanceof Sequelize.ValidationError) {
       const msg = e.errors.map(x => x.message).join('\n')
@@ -105,7 +105,7 @@ router.delete('/:taskId', async function (req, res) {
   const { taskId } = req.params
 
   appCrud.deleteTask(taskId)
-  helpers.sendOk(res, {})
+  res.send({})
 })
 
 module.exports = router

@@ -28,7 +28,7 @@ const { renderUser } = require('../models/renders/user')
 */
 router.get('/', async function (req, res) {
   const users = await appCrud.getAllUsers()
-  helpers.sendOk(res, users.map(renderUser))
+  res.send(users.map(renderUser))
 })
 
 /*
@@ -39,7 +39,7 @@ router.post('/', async function (req, res) {
   try {
     const userData = req.body.user
     const user = await appCrud.createUser(userData)
-    helpers.sendOk(res, renderUser(user))
+    res.send(renderUser(user))
   } catch (e) {
     if (e instanceof Sequelize.ValidationError) {
       const msg = e.errors.map(x => x.message).join('\n')
@@ -66,7 +66,7 @@ router.get('/:userId', async function (req, res) {
     if (user === null) {
       helpers.sendError(res, 422, { msg: 'User not found' })
     } else {
-      helpers.sendOk(res, renderUser(user))
+      res.send(renderUser(user))
     }
   } catch (e) {
     console.log(e)
@@ -92,7 +92,7 @@ router.put('/:userId', async function (req, res) {
 
   try {
     await appCrud.updateUsernameAndEmail(userId, req.body.user)
-    helpers.sendOk(res, {})
+    res.send({})
   } catch (e) {
     if (e instanceof Sequelize.ValidationError) {
       const msg = e.errors.map(x => x.message).join('\n')
@@ -121,7 +121,7 @@ router.delete('/:userId', async function (req, res) {
   userId = req.user.id
 
   appCrud.deleteUser(userId)
-  helpers.sendOk(res, {})
+  res.send({})
 })
 
 module.exports = router

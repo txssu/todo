@@ -3,11 +3,9 @@
 module.exports = {
   renderToken (token) {
     return {
-      token: {
-        token: token.token,
-        userId: token.userId,
-        createdAt: token.createdAt
-      }
+      token: token.token,
+      userId: token.userId,
+      createdAt: token.createdAt
     }
   }
 }

@@ -22,7 +22,7 @@ router.post('/', async function (req, res) {
   const user = await appCrud.getUserByUsernameAndPassword(username, password)
   if (typeof user !== 'undefined') {
     const token = await appCrud.createNewToken(user.id)
-    helpers.sendOk(res, renderToken(token))
+    res.send(renderToken(token))
   } else {
     helpers.sendError(res, 403, { msg: 'Wrong username or password' })
   }
@@ -34,7 +34,7 @@ router.post('/', async function (req, res) {
 router.delete('/:token', async function (req, res) {
   const { token } = req.params
   appCrud.deleteToken(token)
-  helpers.sendOk(res, {})
+  res.send({})
 })
 
 module.exports = router
