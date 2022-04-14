@@ -17,33 +17,92 @@ router.use(function (req, res, next) {
   next()
 })
 
-/*
-  GET / - get all user's tasks
+/**
+ *  @openapi
+ *  components:
+ *    schemas:
+ *      Task:
+ *        type: object
+ *        properties:
+ *          id:
+ *            type: integer
+ *          title:
+ *            type: string
+ *          isComplete:
+ *            type: boolean
+ *          createdAt:
+ *            type: string
+ *            format: date
+ *          updatedAt:
+ *            type: string
+ *            format: date
+ *      NewTask:
+ *        type: object
+ *        properties:
+ *          title:
+ *            required: true
+ *            type: string
+ *    parameters:
+ *      taskId:
+ *        name: taskId
+ *        in: path
+ *        required: true
+ *        schema:
+ *          type: integer
+ */
 
-  POST / - create new task
-    params: {task: {title}}
-
-  GET /:taskId - get task by id
-
-  PUT /:taskId - change task data
-    params: {task: {title, isComplete}}
-
-  DELETE /:taskId - delete task
-*/
-
-/*
-  Get all tasks
-*/
+/**
+ *  @openapi
+ *  /tasks:
+ *    get:
+ *      description: Get all user's tasks
+ *      responses:
+ *        200:
+ *          description: Returns array of tasks
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: array
+ *                items:
+ *                  $ref: '#/components/schemas/Task'
+ *        500:
+ *          $ref: '#/components/responses/ServerError'
+ */
 router.get('/', async function (req, res) {
   const tasks = await appCrud.getUsersTasks(req.user.id)
 
   res.send(tasks.map(renderTask))
 })
 
-/*
-  Create new task
-  Required fields: description
-*/
+/**
+ *  @openapi
+ *  /tasks:
+ *    post:
+ *      description: Create new task
+ *      requestBody:
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                task:
+ *                  $ref: '#/components/schemas/NewTask'
+ *      responses:
+ *        200:
+ *          description: Returns created task
+ *          content:
+ *            application/json:
+ *              schema:
+ *                $ref: '#/components/schemas/Task'
+ *        422:
+ *          description: The data failed to be validated
+ *          content:
+ *            application/json:
+ *              schema:
+ *                $ref: '#/components/schemas/Error'
+ *        500:
+ *          $ref: '#/components/responses/ServerError'
+ */
 router.post('/', async function (req, res) {
   try {
     const taskData = req.body.task
@@ -61,9 +120,29 @@ router.post('/', async function (req, res) {
   }
 })
 
-/*
-  Get task by id
-*/
+/**
+ *  @openapi
+ *  /tasks/{taskId}:
+ *    get:
+ *      description: Get task info by its id
+ *      parameters:
+ *        - $ref: '#/components/parameters/taskId'
+ *      responses:
+ *        200:
+ *          description: Returns task
+ *          content:
+ *            application/json:
+ *              schema:
+ *                $ref: '#/components/schemas/Task'
+ *        404:
+ *          description: There is no task with this ID
+ *          content:
+ *            application/json:
+ *              schema:
+ *                $ref: '#/components/schemas/Error'
+ *        500:
+ *          $ref: '#/components/responses/ServerError'
+ */
 router.get('/:taskId', async function (req, res) {
   const { taskId } = req.params
 
@@ -81,9 +160,32 @@ router.get('/:taskId', async function (req, res) {
   }
 })
 
-/*
-  Update task's data
-*/
+/**
+ *  @openapi
+ *  /tasks/{taskId}:
+ *    put:
+ *      description: Change task title and complete status
+ *      requestBody:
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                task:
+ *                  type: object
+ *                  properties:
+ *                    title:
+ *                      type: string
+ *                    isComplete:
+ *                      type: boolean
+ *      parameters:
+ *        - $ref: '#/components/parameters/taskId'
+ *      responses:
+ *        200:
+ *          description: Task updated or nothing changed
+ *        500:
+ *          $ref: '#/components/responses/ServerError'
+ */
 router.put('/:taskId', async function (req, res) {
   const { taskId } = req.params
 
@@ -101,6 +203,19 @@ router.put('/:taskId', async function (req, res) {
   }
 })
 
+/**
+ *  @openapi
+ *  /tasks/{taskId}:
+ *    delete:
+ *      description: Delete task
+ *      parameters:
+ *        - $ref: '#/components/parameters/taskId'
+ *      responses:
+ *        200:
+ *          description: Task deleted ot nothing changed
+ *        500:
+ *          $ref: '#/components/responses/ServerError'
+ */
 router.delete('/:taskId', async function (req, res) {
   const { taskId } = req.params
 

@@ -9,32 +9,91 @@ const helpers = require('./helpers')
 
 const { renderUser } = require('../models/renders/user')
 
-/*
-  GET / - get all users
+/**
+ *  @openapi
+ *  components:
+ *    schemas:
+ *      User:
+ *        type: object
+ *        properties:
+ *          id:
+ *            type: integer
+ *          username:
+ *            type: string
+ *          email:
+ *            type: string
+ *      NewUser:
+ *        type: object
+ *        properties:
+ *          username:
+ *            required: true
+ *            type: string
+ *          email:
+ *            required: true
+ *            type: string
+ *          password:
+ *            required: true
+ *            type: string
+ *    parameters:
+ *      userId:
+ *        name: userId
+ *        in: path
+ *        required: true
+ *        schema:
+ *          type: integer
+ */
 
-  POST / - create new user
-    params: {user: {username, email, password}}
-
-  GET /:userId - get user by id
-
-  PUT /:userId - change user username of email
-    params: {user: {username, email}}
-
-  DELETE /:userId - delete user
-*/
-
-/*
-  Get all users from database
-*/
+/**
+ *  @openapi
+ *  /users:
+ *    get:
+ *      description: Get all users
+ *      responses:
+ *        200:
+ *          description: Returns array of users
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: array
+ *                items:
+ *                  $ref: '#/components/schemas/User'
+ *        500:
+ *          $ref: '#/components/responses/ServerError'
+ */
 router.get('/', async function (req, res) {
   const users = await appCrud.getAllUsers()
   res.send(users.map(renderUser))
 })
 
-/*
-  Create new user with hashing his password
-  Required fields: username, password, email
-*/
+/**
+ *  @openapi
+ *  /users:
+ *    post:
+ *      description: Create new user
+ *      requestBody:
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                user:
+ *                  $ref: '#/components/schemas/NewUser'
+ *      responses:
+ *        200:
+ *          description: Returns created user
+ *          content:
+ *            application/json:
+ *              schema:
+ *                $ref: '#/components/schemas/User'
+ *        422:
+ *          description: The data failed to be validated
+ *          content:
+ *            application/json:
+ *              schema:
+ *                $ref: '#/components/schemas/Error'
+ *        500:
+ *          $ref: '#/components/responses/ServerError'
+ */
 router.post('/', async function (req, res) {
   try {
     const userData = req.body.user
@@ -51,9 +110,29 @@ router.post('/', async function (req, res) {
   }
 })
 
-/*
-  Get user by id
-*/
+/**
+ *  @openapi
+ *  /users/{userId}:
+ *    get:
+ *      description: Get user info by his id
+ *      parameters:
+ *        - $ref: '#/components/parameters/userId'
+ *      responses:
+ *        200:
+ *          description: Returns user
+ *          content:
+ *            application/json:
+ *              schema:
+ *                $ref: '#/components/schemas/User'
+ *        404:
+ *          description: There is no user with this ID
+ *          content:
+ *            application/json:
+ *              schema:
+ *                $ref: '#/components/schemas/Error'
+ *        500:
+ *          $ref: '#/components/responses/ServerError'
+ */
 router.get('/:userId', async function (req, res) {
   let { userId } = req.params
 
@@ -74,9 +153,38 @@ router.get('/:userId', async function (req, res) {
   }
 })
 
-/*
-  Update user's username and/or email
-*/
+/**
+ *  @openapi
+ *  /users/{userId}:
+ *    put:
+ *      description: Change user email or username
+ *      requestBody:
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                user:
+ *                  type: object
+ *                  properties:
+ *                    username:
+ *                      type: string
+ *                    email:
+ *                      type: string
+ *      parameters:
+ *        - $ref: '#/components/parameters/userId'
+ *      responses:
+ *        200:
+ *          description: User updated or nothing changed
+ *        403:
+ *          description: You can only edit your profile
+ *          content:
+ *            application/json:
+ *              schema:
+ *                $ref: '#/components/schemas/Error'
+ *        500:
+ *          $ref: '#/components/responses/ServerError'
+ */
 router.put('/:userId', async function (req, res) {
   let { userId } = req.params
 
@@ -104,9 +212,25 @@ router.put('/:userId', async function (req, res) {
   }
 })
 
-/*
-  Delete user
-*/
+/**
+ *  @openapi
+ *  /users/{userId}:
+ *    delete:
+ *      description: Delete user
+ *      parameters:
+ *        - $ref: '#/components/parameters/userId'
+ *      responses:
+ *        200:
+ *          description: User deleted ot nothing changed
+ *        403:
+ *          description: You can only delete your profile
+ *          content:
+ *            application/json:
+ *              schema:
+ *                $ref: '#/components/schemas/Error'
+ *        500:
+ *          $ref: '#/components/responses/ServerError'
+ */
 router.delete('/:userId', async function (req, res) {
   let { userId } = req.params
 

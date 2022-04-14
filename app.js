@@ -3,6 +3,24 @@ const express = require('express')
 const path = require('path')
 const cookieParser = require('cookie-parser')
 const logger = require('morgan')
+const swaggerUi = require('swagger-ui-express')
+const swaggerJsdoc = require('swagger-jsdoc')
+
+const options = {
+  definition: {
+    openapi: '3.0.3',
+    info: {
+      title: 'todo',
+      version: '1.0.0'
+    },
+    license: {
+      name: 'MIT'
+    }
+  },
+  apis: ['./routes/*.js']
+}
+
+const openapiSpecification = swaggerJsdoc(options)
 
 const env = process.env.NODE_ENV || 'dev'
 
@@ -21,6 +39,8 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
 app.use('/static', express.static(path.join(__dirname, 'public')))
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(openapiSpecification))
+app.use('/openapi', function (req, res) {res.send(openapiSpecification)})
 
 app.use(auth)
 
