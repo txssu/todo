@@ -70,7 +70,7 @@ router.get('/:taskId', async function (req, res) {
   try {
     const task = await appCrud.getUsersTaskById(req.user, taskId)
     if (task === null) {
-      res.status(422).send({ msg: 'Task not found' })
+      res.status(404).send({ msg: 'Task not found' })
     } else {
       console.log(task)
       res.send(renderTask(task))
