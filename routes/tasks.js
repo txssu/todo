@@ -11,7 +11,7 @@ const helpers = require('./helpers')
 
 router.use(function (req, res, next) {
   if (typeof req.user === 'undefined') {
-    res.status(422).send({ msg: 'Authorization required' })
+    res.status(403).send({ msg: 'Authorization required' })
     return
   }
   next()
