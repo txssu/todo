@@ -22,7 +22,8 @@ router.post('/', async function (req, res) {
   const user = await appCrud.getUserByUsernameAndPassword(username, password)
   if (typeof user !== 'undefined') {
     const token = await appCrud.createNewToken(user.id)
-    res.send(renderToken(token))
+    res.cookie('usertoken', token.token, { maxAge: 30*24*60*60, httpOnly: true });
+    res.send()
   } else {
     res.status(403).send({ msg: 'Wrong username or password' })
   }
