@@ -89,7 +89,7 @@ router.put('/:taskId', async function (req, res) {
 
   try {
     await appCrud.updateTaskData(req.user.id, taskId, req.body.task)
-    res.send({})
+    res.send()
   } catch (e) {
     if (e instanceof Sequelize.ValidationError) {
       const msg = e.errors.map(x => x.message).join('\n')
@@ -105,7 +105,7 @@ router.delete('/:taskId', async function (req, res) {
   const { taskId } = req.params
 
   appCrud.deleteTask(taskId)
-  res.send({})
+  res.send()
 })
 
 module.exports = router

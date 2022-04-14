@@ -92,7 +92,7 @@ router.put('/:userId', async function (req, res) {
 
   try {
     await appCrud.updateUsernameAndEmail(userId, req.body.user)
-    res.send({})
+    res.send()
   } catch (e) {
     if (e instanceof Sequelize.ValidationError) {
       const msg = e.errors.map(x => x.message).join('\n')
@@ -121,7 +121,7 @@ router.delete('/:userId', async function (req, res) {
   userId = req.user.id
 
   appCrud.deleteUser(userId)
-  res.send({})
+  res.send()
 })
 
 module.exports = router

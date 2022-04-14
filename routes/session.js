@@ -35,7 +35,7 @@ router.post('/', async function (req, res) {
 router.delete('/:token', async function (req, res) {
   const { token } = req.params
   appCrud.deleteToken(token)
-  res.send({})
+  res.send()
 })
 
 module.exports = router
