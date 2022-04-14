@@ -37,7 +37,7 @@ router.get('/', async function (req, res) {
 */
 router.post('/', async function (req, res) {
   try {
-    const userData = req.body
+    const userData = req.body.user
     const user = await appCrud.createUser(userData)
     res.send(renderUser(user))
   } catch (e) {
@@ -91,7 +91,7 @@ router.put('/:userId', async function (req, res) {
   userId = req.user.id
 
   try {
-    await appCrud.updateUsernameAndEmail(userId, req.body)
+    await appCrud.updateUsernameAndEmail(userId, req.body.user)
     res.send({})
   } catch (e) {
     if (e instanceof Sequelize.ValidationError) {

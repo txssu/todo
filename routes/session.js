@@ -12,7 +12,7 @@ const helpers = require('./helpers')
   Create new token
 */
 router.post('/', async function (req, res) {
-  const { username, password } = req.body
+  const { username, password } = req.body.user
 
   if (typeof password === 'undefined') {
     res.status(422).send({ msg: 'Password required' })
