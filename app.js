@@ -40,7 +40,7 @@ app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
 app.use('/static', express.static(path.join(__dirname, 'public')))
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(openapiSpecification))
-app.use('/openapi', function (req, res) {res.send(openapiSpecification)})
+app.use('/openapi', function (req, res) { res.send(openapiSpecification) })
 
 app.use(auth)
 

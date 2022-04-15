@@ -13,7 +13,7 @@
     "docker:run:postgres": "scripts/docker_run_postgres.sh",
     "docker:restart:all": "npm run docker:rm:all && npm run docker:run:all",
     "docker:rm:all": "scripts/docker_rm_all.sh",
-    "lint": "eslint '**/*.js' --ignore-pattern node_modules/ --fix"
+    "lint": "eslint '**/*.js' --ignore-pattern node_modules/ --ignore-pattern docker/ --fix"
   },
   "license": "MIT",
   "dependencies": {
