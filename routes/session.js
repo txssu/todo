@@ -67,7 +67,10 @@ const helpers = require('./helpers')
 router.post('/', async function (req, res) {
   const { username, password } = req.body.user
 
-  // FIXME: Error when request without username
+  if (typeof username === 'undefined') {
+    res.status(422).send({ msg: 'Username required' })
+    return
+  }
   if (typeof password === 'undefined') {
     res.status(422).send({ msg: 'Password required' })
     return
