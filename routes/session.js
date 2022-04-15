@@ -4,10 +4,6 @@ const router = express.Router()
 
 const appCrud = require('../app/crud')
 
-const { renderToken } = require('../models/renders/token')
-
-const helpers = require('./helpers')
-
 /**
  *  @openapi
  *  components:
@@ -79,7 +75,10 @@ router.post('/', async function (req, res) {
   const user = await appCrud.getUserByUsernameAndPassword(username, password)
   if (typeof user !== 'undefined') {
     const token = await appCrud.createNewToken(user.id)
-    res.cookie('usertoken', token.token, { maxAge: 30*24*60*60, httpOnly: true });
+    res.cookie('usertoken', token.token, {
+      maxAge: 30 * 24 * 60 * 60,
+      httpOnly: true
+    })
     res.send()
   } else {
     res.status(403).send({ msg: 'Wrong username or password' })
@@ -88,25 +87,47 @@ router.post('/', async function (req, res) {
 
 /**
  *  @openapi
- *  /session/{token}:
+ *  /session:
  *    delete:
- *      description: Create new token
- *      parameters:
- *        - name: token
- *          in: path
- *          required: true
- *          schema:
- *            type: string
+ *      description: Delete current token
  *      responses:
  *        200:
- *          description: Token deleted ot nothing changed
+ *          description: Token deleted or nothing changed
  *        500:
  *          $ref: '#/components/responses/ServerError'
  */
-router.delete('/:token', async function (req, res) {
-  const { token } = req.params
+router.delete('/', async function (req, res) {
+  const token = req.cookies.usertoken
   appCrud.deleteToken(token)
   res.send()
+})
+
+/**
+ *  @openapi
+ *  /session/others:
+ *    delete:
+ *      description: Delete all tokens except the current
+ *      responses:
+ *        200:
+ *          description: Tokens deleted ot nothing changed
+ *        403:
+ *          description: Unknown token
+ *          content:
+ *            application/json:
+ *              schema:
+ *                $ref: '#/components/schemas/Error'
+ *        500:
+ *          $ref: '#/components/responses/ServerError'
+ */
+router.delete('/others', async function (req, res) {
+  const token = req.cookies.usertoken
+  const user = await appCrud.getUserByToken(token)
+  if (typeof user !== 'undefined') {
+    appCrud.deleteOtherTokens(user, token)
+    res.send()
+  } else {
+    res.status(403).send({ msg: 'Unknown token' })
+  }
 })
 
 module.exports = router

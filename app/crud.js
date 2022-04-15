@@ -1,4 +1,5 @@
 const models = require('../models')
+const { Op } = require('sequelize')
 const passwords = require('./passwords')
 
 module.exports = {
@@ -50,6 +51,18 @@ module.exports = {
     return models.Token.create({
       userId,
       token
+    })
+  },
+  async deleteOtherTokens (user, token) {
+    const tokens = await user.getTokens({
+      where: {
+        token: {
+          [Op.not]: token
+        }
+      }
+    })
+    tokens.forEach(token => {
+      token.destroy()
     })
   },
   async deleteToken (token) {
