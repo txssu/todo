@@ -7,7 +7,12 @@
     "dev": "DEBUG=todo:* NODE_ENV=dev node ./bin/www",
     "db:create": "sequelize-cli db:create",
     "db:migrate": "sequelize-cli db:migrate",
-    "docker-postgres": "scripts/docker_run_postgres.sh",
+    "docker:build:app": "scripts/docker_build_app.sh",
+    "docker:run:all": "npm run docker:build:app && npm run docker:run:app && npm run docker:run:postgres",
+    "docker:run:app": "scripts/docker_run_app.sh",
+    "docker:run:postgres": "scripts/docker_run_postgres.sh",
+    "docker:restart:all": "npm run docker:rm:all && npm run docker:run:all",
+    "docker:rm:all": "scripts/docker_rm_all.sh",
     "lint": "eslint '**/*.js' --ignore-pattern node_modules/ --fix"
   },
   "license": "MIT",

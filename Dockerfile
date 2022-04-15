@@ -8,7 +8,7 @@ RUN npm ci --only=production
 
 COPY . .
 
-ARG port=8000
+ARG port=8080
 ENV PORT=$port
 ENV NODE_ENV="prod"
 
